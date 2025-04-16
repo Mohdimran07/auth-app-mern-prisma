@@ -1,0 +1,39 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                          String    @id @default(auto()) @map("_id") @db.ObjectId
+  email                       String    @unique
+  password                    String
+  role                        String    @default("user") // e.g., "user" or "admin"
+  username                    String?
+  lastLoginAt                 DateTime? @default(now())
+  isVerified                  Boolean   @default(false)
+  resetPasswordToken          String?
+  resetPasswordTokenExpiresAt DateTime?
+  verificationToken           String?
+  verificationTokenExpiresAt  DateTime?
+  createdAt                   DateTime  @default(now())
+  updatedAt                   DateTime  @updatedAt
+}
+
+// When you change or update your Prisma schema, you should always run: npx prisma generate
+// This will regenerate the Prisma Client with the new schema.
+// You can also run: npx prisma migrate dev --name <migration_name>
+
+// rm -rf node_modules
+// rm package-lock.json
+// npm install
+// npx prisma generate
